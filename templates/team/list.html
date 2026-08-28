@@ -13,9 +13,9 @@
   <div class="lawyer-card">
     <div class="lawyer-photo">
       {% if lawyer.photo %}
-        <img src="{{ lawyer.photo.url }}" alt="{{ lawyer.name }}" style="width:100%;height:100%;object-fit:cover;">
+        <img src="{{ lawyer.photo.url }}" alt="{{ lawyer.name }}">
       {% else %}
-        <span>{{ lawyer.initials }}</span>
+        <div class="lawyer-medallion"><span>{{ lawyer.initials }}</span></div>
       {% endif %}
     </div>
     <div class="lawyer-body">
