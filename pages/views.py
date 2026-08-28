@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import redirect, render
 
+from config.antispam import is_rate_limited
 from practice_areas.models import PracticeArea
 
 from .forms import ContactMessageForm
@@ -15,7 +16,8 @@ def contact(request):
     if request.method == "POST":
         form = ContactMessageForm(request.POST)
         if form.is_valid():
-            form.save()
+            if not form.is_spam() and not is_rate_limited(request, "contact"):
+                form.save()
             messages.success(
                 request,
                 "Thank you — we've received your message and will call you back shortly.",

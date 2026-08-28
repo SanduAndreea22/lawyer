@@ -25,12 +25,15 @@
       </div>
       <form method="post">
         {% csrf_token %}
+        <div class="hp-wrap" aria-hidden="true">{{ form.website }}</div>
         {% for field in form %}
+        {% if field.name != "website" %}
         <div class="field">
           <label for="{{ field.id_for_label }}">{{ field.label }}</label>
           {{ field }}
           {{ field.errors }}
         </div>
+        {% endif %}
         {% endfor %}
         {% if form.non_field_errors %}<ul class="errorlist">{% for e in form.non_field_errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
         <button type="submit" class="btn-primary">Confirm the booking</button>

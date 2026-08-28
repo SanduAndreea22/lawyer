@@ -60,6 +60,31 @@ if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 
+# Logging
+# Without this, Django's default LOGGING sends request/server errors (5xx)
+# to mail_admins - which does nothing unless ADMINS + an email backend are
+# configured, so they'd otherwise vanish silently in production. Log to
+# stdout/stderr instead: every mainstream host (Render, Railway, Fly.io,
+# Heroku, etc.) captures that automatically, no extra service required.
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            # WARNING catches 404s and ERROR catches 500s (Django logs both
+            # via django.request) without routine INFO/DEBUG chatter.
+            "level": "WARNING",
+        },
+    },
+}
+
+
 # Application definition
 
 INSTALLED_APPS = [

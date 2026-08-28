@@ -42,12 +42,15 @@
     <span class="step-label">Send us a message</span>
     <form method="post">
       {% csrf_token %}
+      <div class="hp-wrap" aria-hidden="true">{{ form.website }}</div>
       {% for field in form %}
+      {% if field.name != "website" %}
       <div class="field">
         <label for="{{ field.id_for_label }}">{{ field.label }}</label>
         {{ field }}
         {{ field.errors }}
       </div>
+      {% endif %}
       {% endfor %}
       <button type="submit" class="btn-primary">Send message</button>
     </form>

@@ -1,8 +1,19 @@
+from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator
 from django.db import models
 
 from booking.models import phone_validator
 from practice_areas.models import PracticeArea
 from team.models import Lawyer
+
+MAX_DOCUMENT_UPLOAD_MB = 15
+ALLOWED_DOCUMENT_EXTENSIONS = ["pdf", "doc", "docx", "odt", "rtf", "txt", "jpg", "jpeg", "png"]
+
+
+def validate_document_size(file):
+    limit_bytes = MAX_DOCUMENT_UPLOAD_MB * 1024 * 1024
+    if file.size > limit_bytes:
+        raise ValidationError(f"File is larger than {MAX_DOCUMENT_UPLOAD_MB} MB.")
 
 
 class Case(models.Model):
@@ -39,7 +50,15 @@ class Case(models.Model):
 
 class Document(models.Model):
     case = models.ForeignKey(Case, on_delete=models.CASCADE, related_name="documents")
-    file = models.FileField(upload_to="case_documents/%Y/%m/")
+    file = models.FileField(
+        upload_to="case_documents/%Y/%m/",
+        validators=[
+            FileExtensionValidator(allowed_extensions=ALLOWED_DOCUMENT_EXTENSIONS),
+            validate_document_size,
+        ],
+        help_text=f"Max {MAX_DOCUMENT_UPLOAD_MB} MB. Allowed types: "
+        + ", ".join(ALLOWED_DOCUMENT_EXTENSIONS),
+    )
     label = models.CharField(max_length=150, blank=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
 

@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
 from booking.models import Appointment
-from booking.services import get_available_slots
+from booking.services import get_available_slots, has_conflicting_appointment
 
 from .access import is_full_staff, staff_or_lawyer_required, user_lawyer
 from .forms import CaseStatusForm, DocumentUploadForm, InvoiceForm
@@ -138,17 +138,9 @@ def appointment_reschedule_confirm(request, pk, start_iso):
     if request.method == "POST":
         try:
             with transaction.atomic():
-                conflict = (
-                    Appointment.objects.select_for_update()
-                    .filter(
-                        lawyer=appointment.lawyer,
-                        start_time=new_start,
-                        status__in=[Appointment.Status.PENDING, Appointment.Status.CONFIRMED],
-                    )
-                    .exclude(pk=appointment.pk)
-                    .exists()
-                )
-                if conflict:
+                if has_conflicting_appointment(
+                    appointment.lawyer, new_start, exclude_pk=appointment.pk
+                ):
                     messages.error(request, "That slot was just taken. Please choose another.")
                     return redirect("dashboard:appointment_reschedule", pk=pk)
                 appointment.start_time = new_start

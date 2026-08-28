@@ -84,6 +84,8 @@
       <div class="field">
         <label for="{{ upload_form.file.id_for_label }}">Upload a document</label>
         {{ upload_form.file }}
+        {{ upload_form.file.errors }}
+        <p class="no-obligation-note" style="text-align:left;margin-top:0.4rem;">{{ upload_form.file.help_text }}</p>
       </div>
       <div class="field">
         <label for="{{ upload_form.label.id_for_label }}">Label</label>

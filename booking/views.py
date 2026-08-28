@@ -5,12 +5,13 @@ from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
+from config.antispam import is_rate_limited
 from practice_areas.models import PracticeArea
 from team.models import Lawyer
 
 from .forms import AppointmentContactForm
 from .models import Appointment
-from .services import get_available_slots, lawyers_for_area
+from .services import get_available_slots, has_conflicting_appointment, lawyers_for_area
 
 
 def _get_lawyer_or_404(lawyer_pk, area):
@@ -87,23 +88,15 @@ def confirm(request, area_slug, lawyer_id, start_iso):
 
     form = AppointmentContactForm(request.POST or None)
 
-    if request.method == "POST" and not slot_taken:
-        if form.is_valid():
+    if request.method == "POST" and not slot_taken and form.is_valid():
+        if form.is_spam() or is_rate_limited(request, "booking", limit=8):
+            # Treat it the same as a taken slot - no need to reveal to a bot
+            # that it got caught, and no fake data to fabricate.
+            slot_taken = True
+        else:
             try:
                 with transaction.atomic():
-                    conflict = (
-                        Appointment.objects.select_for_update()
-                        .filter(
-                            lawyer=lawyer,
-                            start_time=start_time,
-                            status__in=[
-                                Appointment.Status.PENDING,
-                                Appointment.Status.CONFIRMED,
-                            ],
-                        )
-                        .exists()
-                    )
-                    if conflict:
+                    if has_conflicting_appointment(lawyer, start_time):
                         slot_taken = True
                     else:
                         appointment = form.save(commit=False)

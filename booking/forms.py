@@ -1,9 +1,11 @@
 from django import forms
 
+from config.antispam import HoneypotMixin
+
 from .models import Appointment
 
 
-class AppointmentContactForm(forms.ModelForm):
+class AppointmentContactForm(HoneypotMixin, forms.ModelForm):
     class Meta:
         model = Appointment
         fields = ["client_name", "client_phone", "note"]
