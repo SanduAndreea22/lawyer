@@ -7,6 +7,8 @@
   }
 
   function animateCount(el) {
+    if (el.dataset.counted) return;
+    el.dataset.counted = "1";
     var target = parseInt(el.getAttribute("data-count-to"), 10);
     var suffix = el.getAttribute("data-suffix") || "";
     var duration = 1400;
@@ -48,4 +50,12 @@
   figures.forEach(function (el) {
     observer.observe(el);
   });
+
+  // Safety net: if this section never scrolls into view (a no-scroll
+  // screenshot/PDF export tool, or the observer just not firing in time),
+  // count up anyway rather than leaving the stats stuck.
+  window.setTimeout(function () {
+    figures.forEach(animateCount);
+    observer.disconnect();
+  }, 2000);
 })();
