@@ -1,0 +1,81 @@
+{% extends "dashboard/_base.html" %}
+{% block title %}{{ case.client_name }} — Staff Dashboard{% endblock %}
+{% block content %}
+
+<section class="dash-header">
+  <span class="eyebrow">Case · {{ case.practice_area.name }}</span>
+  <h1>{{ case.client_name }}</h1>
+  <p class="lede">{{ case.client_phone }} · Handled by {{ case.lawyer.name }}</p>
+</section>
+
+<div class="dash-wrap">
+  <div class="dash-grid" style="grid-template-columns: 1.2fr 0.8fr;">
+    <div class="dash-panel">
+      <h2>Case status &amp; notes</h2>
+      <form method="post">
+        {% csrf_token %}
+        <div class="field">
+          <label for="{{ status_form.status.id_for_label }}">Status</label>
+          {{ status_form.status }}
+        </div>
+        <div class="field">
+          <label for="{{ status_form.description.id_for_label }}">Notes</label>
+          {{ status_form.description }}
+        </div>
+        <button type="submit" name="update_status" class="btn-primary">Save</button>
+      </form>
+    </div>
+
+    <div class="dash-panel">
+      <h2>Invoices</h2>
+      {% for invoice in invoices %}
+      <div class="dash-row">
+        <div>
+          <div class="primary">{{ invoice.amount }} RON</div>
+          <span class="status-badge status-{{ invoice.status }}">{{ invoice.get_status_display }}</span>
+        </div>
+        <div class="meta">
+          Due {{ invoice.due_date|date:"j M Y" }}<br>
+          <form method="post" action="{% url 'dashboard:invoice_toggle_paid' invoice.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="btn-tiny" style="margin-top:0.4rem;">
+              Mark as {% if invoice.status == "unpaid" %}paid{% else %}unpaid{% endif %}
+            </button>
+          </form>
+        </div>
+      </div>
+      {% empty %}
+      <p class="empty">No invoices yet for this case. Add one from the admin.</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="dash-panel" style="margin-top:2rem;">
+    <h2>Documents</h2>
+    {% for document in documents %}
+    <div class="dash-row">
+      <div class="primary">{{ document.label|default:document.file.name }}</div>
+      <div class="meta"><a href="{{ document.file.url }}">Download</a> · {{ document.uploaded_at|date:"j M Y" }}</div>
+    </div>
+    {% empty %}
+    <p class="empty">No documents uploaded yet.</p>
+    {% endfor %}
+
+    <form method="post" enctype="multipart/form-data" style="margin-top:1.6rem;">
+      {% csrf_token %}
+      <div class="field">
+        <label for="{{ upload_form.file.id_for_label }}">Upload a document</label>
+        {{ upload_form.file }}
+      </div>
+      <div class="field">
+        <label for="{{ upload_form.label.id_for_label }}">Label</label>
+        {{ upload_form.label }}
+      </div>
+      <button type="submit" name="upload_document" class="btn-primary">Upload</button>
+    </form>
+  </div>
+
+  <p style="margin-top:2rem;"><a href="{% url 'dashboard:cases' %}" class="btn-secondary">← Back to cases</a></p>
+</div>
+
+{% endblock %}

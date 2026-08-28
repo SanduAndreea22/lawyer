@@ -1,0 +1,61 @@
+{% extends "dashboard/_base.html" %}
+{% block title %}Appointments — Staff Dashboard{% endblock %}
+{% block content %}
+
+<section class="dash-header">
+  <span class="eyebrow">Staff Dashboard</span>
+  <h1>Appointments</h1>
+</section>
+
+<div class="dash-wrap">
+  <div class="filter-row">
+    <a href="{% url 'dashboard:appointments' %}"{% if not status_filter %} class="active"{% endif %}>All</a>
+    {% for value, label in statuses %}
+    <a href="?status={{ value }}"{% if status_filter == value %} class="active"{% endif %}>{{ label }}</a>
+    {% endfor %}
+  </div>
+
+  <div style="overflow-x:auto;">
+  <table class="dash-table">
+    <thead>
+      <tr>
+        <th>Client</th>
+        <th>Practice area</th>
+        <th>Lawyer</th>
+        <th>When</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for appt in appointments %}
+      <tr>
+        <td>{{ appt.client_name }}<br><span class="meta" style="font-family:'Inter',sans-serif;font-size:0.78rem;color:#8a7d6c;">{{ appt.client_phone }}</span></td>
+        <td>{{ appt.practice_area.name }}</td>
+        <td>{{ appt.lawyer.name|default:"Any" }}</td>
+        <td>{{ appt.start_time|date:"j M Y, H:i" }}</td>
+        <td><span class="status-badge status-{{ appt.status }}">{{ appt.get_status_display }}</span></td>
+        <td>
+          <div class="dash-actions">
+            {% if appt.status == "pending" %}
+            <form method="post" action="{% url 'dashboard:appointment_confirm' appt.pk %}">{% csrf_token %}<button class="btn-tiny primary" type="submit">Confirm</button></form>
+            {% endif %}
+            {% if appt.status != "cancelled" %}
+            <a class="btn-tiny" href="{% url 'dashboard:appointment_reschedule' appt.pk %}">Reschedule</a>
+            <form method="post" action="{% url 'dashboard:appointment_cancel' appt.pk %}">{% csrf_token %}<button class="btn-tiny danger" type="submit">Cancel</button></form>
+            {% endif %}
+            {% if appt.status == "confirmed" %}
+            <form method="post" action="{% url 'dashboard:appointment_open_case' appt.pk %}">{% csrf_token %}<button class="btn-tiny" type="submit">Open case</button></form>
+            {% endif %}
+          </div>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6" class="empty">No appointments match this filter.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+
+{% endblock %}

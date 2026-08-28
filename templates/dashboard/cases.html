@@ -1,0 +1,48 @@
+{% extends "dashboard/_base.html" %}
+{% block title %}Cases — Staff Dashboard{% endblock %}
+{% block content %}
+
+<section class="dash-header">
+  <span class="eyebrow">Staff Dashboard</span>
+  <h1>Cases</h1>
+</section>
+
+<div class="dash-wrap">
+  <div class="filter-row">
+    <a href="{% url 'dashboard:cases' %}"{% if not status_filter %} class="active"{% endif %}>All</a>
+    {% for value, label in statuses %}
+    <a href="?status={{ value }}"{% if status_filter == value %} class="active"{% endif %}>{{ label }}</a>
+    {% endfor %}
+  </div>
+
+  <div style="overflow-x:auto;">
+  <table class="dash-table">
+    <thead>
+      <tr>
+        <th>Client</th>
+        <th>Practice area</th>
+        <th>Lawyer</th>
+        <th>Status</th>
+        <th>Updated</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for case in cases %}
+      <tr>
+        <td>{{ case.client_name }}</td>
+        <td>{{ case.practice_area.name }}</td>
+        <td>{{ case.lawyer.name }}</td>
+        <td><span class="status-badge status-{{ case.status }}">{{ case.get_status_display }}</span></td>
+        <td>{{ case.updated_at|date:"j M Y" }}</td>
+        <td><a class="btn-tiny" href="{% url 'dashboard:case_detail' case.pk %}">Open →</a></td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6" class="empty">No cases match this filter.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+
+{% endblock %}

@@ -398,6 +398,7 @@ textarea.form-input { resize: vertical; min-height: 90px; font-family: 'Source S
   background: #fff;
   cursor: pointer;
 }
+button.slot { font: inherit; }
 .slot.selected, a.slot.selected {
   border-color: var(--burgundy);
   background: var(--burgundy);

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "practice_areas",
     "team",
     "booking",
+    "dashboard",
 ]
 
 MIDDLEWARE = [
@@ -123,6 +124,10 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+LOGIN_URL = "dashboard:login"
+LOGIN_REDIRECT_URL = "dashboard:overview"
+LOGOUT_REDIRECT_URL = "pages:home"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

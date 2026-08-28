@@ -1,9 +1,18 @@
+from django.conf import settings
 from django.db import models
 
 from practice_areas.models import PracticeArea
 
 
 class Lawyer(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="lawyer_profile",
+        help_text="Staff login linked to this lawyer, for dashboard access.",
+    )
     name = models.CharField(max_length=120)
     specialization = models.CharField(max_length=150)
     practice_areas = models.ManyToManyField(PracticeArea, related_name="lawyers")

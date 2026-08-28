@@ -1,0 +1,43 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Staff Dashboard — Cassian &amp; Voicu{% endblock %}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/main.css' %}">
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+</head>
+<body>
+
+<nav>
+  <a href="{% url 'dashboard:overview' %}" class="brand">Cassian &amp; Voicu <span class="staff-tag">Staff</span></a>
+  {% if user.is_authenticated %}
+  <div class="links">
+    <a href="{% url 'dashboard:overview' %}"{% if dashboard_nav == 'overview' %} class="active"{% endif %}>Overview</a>
+    <a href="{% url 'dashboard:appointments' %}"{% if dashboard_nav == 'appointments' %} class="active"{% endif %}>Appointments</a>
+    <a href="{% url 'dashboard:cases' %}"{% if dashboard_nav == 'cases' %} class="active"{% endif %}>Cases</a>
+    <form method="post" action="{% url 'dashboard:logout' %}" style="display:inline;">
+      {% csrf_token %}
+      <button type="submit" class="btn-secondary" style="background:none;border:none;border-bottom:1px solid var(--gold);cursor:pointer;font-family:'Inter',sans-serif;font-size:0.85rem;">Log out</button>
+    </form>
+  </div>
+  {% endif %}
+</nav>
+
+{% if messages %}
+<ul class="messages">
+  {% for message in messages %}<li>{{ message }}</li>{% endfor %}
+</ul>
+{% endif %}
+
+{% block content %}{% endblock %}
+
+<footer>
+  <div class="brand">Cassian &amp; Voicu — Staff Area</div>
+  <div class="meta"><a href="{% url 'pages:home' %}" style="border-bottom:1px solid var(--gold-light);">← Back to the public site</a></div>
+</footer>
+
+</body>
+</html>

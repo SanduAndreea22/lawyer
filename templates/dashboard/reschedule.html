@@ -1,0 +1,36 @@
+{% extends "dashboard/_base.html" %}
+{% block title %}Reschedule — Staff Dashboard{% endblock %}
+{% block content %}
+
+<section class="dash-header">
+  <span class="eyebrow">Reschedule</span>
+  <h1>{{ appointment.client_name }} — {{ appointment.practice_area.name }}</h1>
+  <p class="lede">Currently booked for {{ appointment.start_time|date:"l, j F Y" }} at {{ appointment.start_time|date:"H:i" }} with {{ appointment.lawyer.name|default:"an unassigned lawyer" }}.</p>
+</section>
+
+<div class="dash-wrap">
+  <div class="booking-card" style="max-width:720px;">
+    {% if not appointment.lawyer %}
+      <p class="empty">This appointment has no lawyer assigned yet, so there's nothing to reschedule against. Assign a lawyer first.</p>
+    {% elif slots_by_day %}
+      {% for day, slots in slots_by_day.items %}
+      <div class="slot-day">
+        <span class="day-label">{{ day|date:"l, j F" }}</span>
+        <div class="slot-row">
+          {% for slot in slots %}
+          <form method="post" action="{% url 'dashboard:appointment_reschedule_confirm' appointment.pk slot.start|date:'YmdHi' %}">
+            {% csrf_token %}
+            <button type="submit" class="slot" style="cursor:pointer;">{{ slot.start|date:"H:i" }}</button>
+          </form>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <p class="empty">No open slots in the next few weeks for {{ appointment.lawyer.name }}.</p>
+    {% endif %}
+    <p class="no-obligation-note"><a href="{% url 'dashboard:appointments' %}" class="btn-secondary">← Back to appointments</a></p>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "dashboard/_base.html" %}
+{% block title %}Overview — Staff Dashboard{% endblock %}
+{% block content %}
+
+<section class="dash-header">
+  <span class="eyebrow">Staff Dashboard</span>
+  <h1>Welcome back, {{ request.user.first_name|default:request.user.username }}.</h1>
+  <p class="lede">Upcoming consultations, active cases, and unpaid invoices at a glance.</p>
+</section>
+
+<div class="dash-wrap">
+  <div class="dash-grid">
+    <div class="dash-panel">
+      <h2>Upcoming appointments</h2>
+      {% for appt in upcoming %}
+      <div class="dash-row">
+        <div>
+          <div class="primary">{{ appt.client_name }}</div>
+          <span class="status-badge status-{{ appt.status }}">{{ appt.get_status_display }}</span>
+        </div>
+        <div class="meta">{{ appt.practice_area.name }}<br>{{ appt.start_time|date:"j M, H:i" }}</div>
+      </div>
+      {% empty %}
+      <p class="empty">No upcoming appointments.</p>
+      {% endfor %}
+      <p style="margin-top:1.2rem;"><a href="{% url 'dashboard:appointments' %}" class="btn-secondary">View all →</a></p>
+    </div>
+
+    <div class="dash-panel">
+      <h2>Active cases</h2>
+      {% for case in active_cases %}
+      <div class="dash-row">
+        <div>
+          <div class="primary">{{ case.client_name }}</div>
+          <span class="status-badge status-{{ case.status }}">{{ case.get_status_display }}</span>
+        </div>
+        <div class="meta">{{ case.practice_area.name }}<br>{{ case.lawyer.name }}</div>
+      </div>
+      {% empty %}
+      <p class="empty">No active cases.</p>
+      {% endfor %}
+      <p style="margin-top:1.2rem;"><a href="{% url 'dashboard:cases' %}" class="btn-secondary">View all →</a></p>
+    </div>
+
+    <div class="dash-panel">
+      <h2>Unpaid invoices</h2>
+      {% for invoice in unpaid_invoices %}
+      <div class="dash-row">
+        <div>
+          <div class="primary">{{ invoice.case.client_name }}</div>
+          <span class="status-badge status-unpaid">Due {{ invoice.due_date|date:"j M" }}</span>
+        </div>
+        <div class="meta">{{ invoice.amount }} RON<br><a href="{% url 'dashboard:case_detail' invoice.case_id %}">Open case →</a></div>
+      </div>
+      {% empty %}
+      <p class="empty">No unpaid invoices.</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -8,6 +8,7 @@ urlpatterns = [
     path("practice-areas/", include("practice_areas.urls")),
     path("team/", include("team.urls")),
     path("booking/", include("booking.urls")),
+    path("dashboard/", include("dashboard.urls")),
     path("", include("pages.urls")),
 ]
 

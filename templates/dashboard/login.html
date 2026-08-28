@@ -1,0 +1,28 @@
+{% extends "dashboard/_base.html" %}
+{% block title %}Staff Login — Cassian &amp; Voicu{% endblock %}
+{% block content %}
+
+<div class="login-wrap">
+  <span class="eyebrow">Staff Area</span>
+  <h1 style="margin:0.8rem 0 1.6rem;">Sign in</h1>
+  <div class="booking-card">
+    <form method="post">
+      {% csrf_token %}
+      {% if form.errors %}
+      <ul class="errorlist"><li>Incorrect username or password.</li></ul>
+      {% endif %}
+      <div class="field">
+        <label for="{{ form.username.id_for_label }}">Username</label>
+        {{ form.username }}
+      </div>
+      <div class="field">
+        <label for="{{ form.password.id_for_label }}">Password</label>
+        {{ form.password }}
+      </div>
+      <input type="hidden" name="next" value="{{ next }}">
+      <button type="submit" class="btn-primary">Sign in</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

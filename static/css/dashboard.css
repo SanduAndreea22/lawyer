@@ -1,0 +1,153 @@
+.staff-tag {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  border-radius: 2px;
+  padding: 0.15rem 0.4rem;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+}
+
+.dash-header {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 3rem 4rem 1rem;
+}
+.dash-header h1 { font-size: clamp(1.9rem, 3vw, 2.6rem); }
+.dash-header p.lede { color: #4a4038; margin-top: 0.6rem; }
+
+.dash-wrap {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem 4rem 6rem;
+}
+
+.dash-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
+.dash-panel {
+  background: #fff;
+  border: 1px solid var(--parchment-dark);
+  border-radius: 4px;
+  padding: 1.8rem;
+  box-shadow: 0 20px 50px -30px rgba(74,22,32,0.18);
+}
+.dash-panel h2 {
+  font-size: 1.15rem;
+  margin-bottom: 1.2rem;
+}
+.dash-panel .empty {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  color: #8a7d6c;
+}
+
+.dash-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.7rem 0;
+  border-top: 1px solid var(--parchment-dark);
+  font-size: 0.92rem;
+}
+.dash-row:first-of-type { border-top: none; }
+.dash-row .primary { color: var(--burgundy-deep); font-family: 'Fraunces', serif; }
+.dash-row .meta { font-family: 'Inter', sans-serif; font-size: 0.78rem; color: #8a7d6c; text-align: right; }
+
+.status-badge {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.55rem;
+  border-radius: 2px;
+  display: inline-block;
+}
+.status-pending, .status-open, .status-unpaid { background: rgba(176,141,87,0.18); color: #8a6d3a; }
+.status-confirmed, .status-in_progress { background: rgba(92,107,79,0.18); color: var(--olive); }
+.status-cancelled, .status-closed, .status-paid { background: rgba(74,22,32,0.1); color: var(--burgundy); }
+
+.dash-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border: 1px solid var(--parchment-dark);
+  border-radius: 4px;
+  overflow: hidden;
+  font-size: 0.9rem;
+}
+.dash-table th, .dash-table td {
+  text-align: left;
+  padding: 0.9rem 1.1rem;
+  border-bottom: 1px solid var(--parchment-dark);
+}
+.dash-table th {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--olive);
+  background: var(--parchment);
+}
+.dash-table tr:last-child td { border-bottom: none; }
+.dash-actions { display: flex; gap: 0.7rem; flex-wrap: wrap; }
+.dash-actions form { display: inline; }
+.btn-tiny {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 2px;
+  border: 1px solid var(--parchment-dark);
+  background: var(--parchment);
+  color: var(--ink);
+  cursor: pointer;
+}
+.btn-tiny.primary { background: var(--burgundy); color: var(--parchment); border-color: var(--burgundy); }
+.btn-tiny.danger { border-color: var(--burgundy); color: var(--burgundy); }
+
+.filter-row {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+}
+.filter-row a {
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--parchment-dark);
+  border-radius: 2px;
+  color: #4a4038;
+}
+.filter-row a.active { background: var(--burgundy); color: var(--parchment); border-color: var(--burgundy); }
+
+.login-wrap {
+  max-width: 420px;
+  margin: 6rem auto;
+  padding: 0 1.6rem;
+}
+.login-wrap .booking-card { text-align: left; }
+.login-wrap input[type="text"],
+.login-wrap input[type="password"] {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  border: 1px solid var(--parchment-dark);
+  background: var(--parchment);
+  padding: 0.85rem 1rem;
+  border-radius: 2px;
+  color: #4a4038;
+  width: 100%;
+  display: block;
+}
+
+@media (max-width: 900px) {
+  .dash-header, .dash-wrap { padding-left: 1.6rem; padding-right: 1.6rem; }
+  .dash-grid { grid-template-columns: 1fr; }
+  .dash-table { display: block; overflow-x: auto; }
+}
