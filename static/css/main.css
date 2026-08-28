@@ -17,6 +17,7 @@ body {
   font-family: 'Source Serif 4', serif;
   line-height: 1.6;
   overflow-x: hidden;
+  transition: padding-bottom 0.3s ease;
 }
 
 body::before {

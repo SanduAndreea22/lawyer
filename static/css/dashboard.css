@@ -31,6 +31,7 @@
   gap: 2rem;
   margin-bottom: 1rem;
 }
+.dash-grid-case { grid-template-columns: 1.2fr 0.8fr; }
 .dash-panel {
   background: #fff;
   border: 1px solid var(--parchment-dark);
