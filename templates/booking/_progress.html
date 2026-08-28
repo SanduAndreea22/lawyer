@@ -1,0 +1,9 @@
+<div class="booking-progress">
+  <div class="track"><div class="fill" style="width: {% widthratio current_step 4 100 %}%;"></div></div>
+  <div class="labels">
+    <span class="{% if current_step > 1 %}done{% elif current_step == 1 %}active{% endif %}">Area</span>
+    <span class="{% if current_step > 2 %}done{% elif current_step == 2 %}active{% endif %}">Lawyer</span>
+    <span class="{% if current_step > 3 %}done{% elif current_step == 3 %}active{% endif %}">Time</span>
+    <span class="{% if current_step > 4 %}done{% elif current_step == 4 %}active{% endif %}">Confirm</span>
+  </div>
+</div>

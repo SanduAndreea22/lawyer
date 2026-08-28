@@ -9,6 +9,7 @@
     <h2 style="max-width:none;">Any preference on who you speak with?</h2>
     <p class="lede">Pick a specific lawyer, or let us match you with whoever is available soonest.</p>
   </div>
+  {% include "booking/_progress.html" %}
   <div class="booking-card">
     <span class="step-label">Step 2 of 3 — Choose a lawyer</span>
     <form method="get" action="{% url 'booking:choose_lawyer' area.slug %}">

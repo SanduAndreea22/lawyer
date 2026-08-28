@@ -11,6 +11,7 @@
       {% if lawyer %}Available times for {{ lawyer.name }}.{% else %}Available times — matched automatically to the first available lawyer.{% endif %}
     </p>
   </div>
+  {% include "booking/_progress.html" %}
   <div class="booking-card">
     <span class="step-label">Step 3 of 3 — Choose a time slot</span>
 

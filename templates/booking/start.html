@@ -9,6 +9,7 @@
     <h2 style="max-width:none;">The first conversation, with no obligation.</h2>
     <p class="lede">A 30-minute initial consultation, so you understand your situation and the possible next steps — before you decide anything.</p>
   </div>
+  {% include "booking/_progress.html" %}
   <div class="booking-card">
     <span class="step-label">Step 1 of 3 — Choose a practice area</span>
     <form method="get" action="{% url 'booking:start' %}">

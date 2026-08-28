@@ -1,6 +1,7 @@
 import datetime as dt
 
 from django.db import IntegrityError, transaction
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
@@ -21,7 +22,7 @@ def start(request):
     return render(
         request,
         "booking/start.html",
-        {"areas": areas, "active_nav": "booking"},
+        {"areas": areas, "active_nav": "booking", "current_step": 1},
     )
 
 
@@ -36,7 +37,7 @@ def choose_lawyer(request, area_slug):
     return render(
         request,
         "booking/choose_lawyer.html",
-        {"area": area, "lawyers": lawyers, "active_nav": "booking"},
+        {"area": area, "lawyers": lawyers, "active_nav": "booking", "current_step": 2},
     )
 
 
@@ -57,6 +58,7 @@ def choose_slot(request, area_slug, lawyer_key):
             "lawyer_key": lawyer_key,
             "slots_by_day": slots_by_day,
             "active_nav": "booking",
+            "current_step": 3,
         },
     )
 
@@ -116,6 +118,7 @@ def confirm(request, area_slug, lawyer_id, start_iso):
             "form": form,
             "slot_taken": slot_taken,
             "active_nav": "booking",
+            "current_step": 4,
         },
     )
 
@@ -127,3 +130,36 @@ def confirmation(request, pk):
         "booking/confirmation.html",
         {"appointment": appointment, "active_nav": "booking"},
     )
+
+
+def _ics_datetime(value):
+    return value.astimezone(dt.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+
+
+def appointment_ics(request, pk):
+    appointment = get_object_or_404(Appointment, pk=pk)
+    start = appointment.start_time
+    end = start + dt.timedelta(minutes=30)
+    lawyer_name = appointment.lawyer.name if appointment.lawyer else "one of our lawyers"
+
+    lines = [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//Cassian & Voicu//Booking//EN",
+        "CALSCALE:GREGORIAN",
+        "BEGIN:VEVENT",
+        f"UID:appointment-{appointment.pk}@cassianvoicu.example",
+        f"DTSTAMP:{_ics_datetime(timezone.now())}",
+        f"DTSTART:{_ics_datetime(start)}",
+        f"DTEND:{_ics_datetime(end)}",
+        f"SUMMARY:Consultation — {appointment.practice_area.name} — Cassian \\& Voicu",
+        f"DESCRIPTION:Initial consultation with {lawyer_name}.",
+        "LOCATION:14 Calea Victoriei\\, 3rd Floor\\, Bucharest\\, Romania",
+        "END:VEVENT",
+        "END:VCALENDAR",
+    ]
+    content = "\r\n".join(lines) + "\r\n"
+
+    response = HttpResponse(content, content_type="text/calendar; charset=utf-8")
+    response["Content-Disposition"] = 'attachment; filename="consultation.ics"'
+    return response
