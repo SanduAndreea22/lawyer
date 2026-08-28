@@ -11,8 +11,13 @@
 <body>
 
 <nav>
-  <a href="{% url 'pages:home' %}" class="brand">Cassian &amp; Voicu</a>
-  <div class="links">
+  <div class="nav-top">
+    <a href="{% url 'pages:home' %}" class="brand">Cassian &amp; Voicu</a>
+    <button type="button" class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="links" id="nav-links">
     <a href="{% url 'practice_areas:list' %}"{% if active_nav == 'practice_areas' %} class="active"{% endif %}>Practice Areas</a>
     <a href="{% url 'booking:start' %}"{% if active_nav == 'booking' %} class="active"{% endif %}>Book a Consultation</a>
     <a href="{% url 'team:list' %}"{% if active_nav == 'team' %} class="active"{% endif %}>Team</a>
@@ -33,5 +38,6 @@
   <div class="meta">Demonstration project — Andreea Tech · booking &amp; scheduling portfolio · <a href="{% url 'dashboard:overview' %}" style="border-bottom:1px solid var(--gold-light);">Staff login</a></div>
 </footer>
 
+<script src="{% static 'js/nav.js' %}"></script>
 </body>
 </html>

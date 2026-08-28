@@ -12,9 +12,16 @@
 <body>
 
 <nav>
-  <a href="{% url 'dashboard:overview' %}" class="brand">Cassian &amp; Voicu <span class="staff-tag">Staff</span></a>
+  <div class="nav-top">
+    <a href="{% url 'dashboard:overview' %}" class="brand">Cassian &amp; Voicu <span class="staff-tag">Staff</span></a>
+    {% if user.is_authenticated %}
+    <button type="button" class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
+    {% endif %}
+  </div>
   {% if user.is_authenticated %}
-  <div class="links">
+  <div class="links" id="nav-links">
     <a href="{% url 'dashboard:overview' %}"{% if dashboard_nav == 'overview' %} class="active"{% endif %}>Overview</a>
     <a href="{% url 'dashboard:appointments' %}"{% if dashboard_nav == 'appointments' %} class="active"{% endif %}>Appointments</a>
     <a href="{% url 'dashboard:cases' %}"{% if dashboard_nav == 'cases' %} class="active"{% endif %}>Cases</a>
@@ -39,5 +46,6 @@
   <div class="meta"><a href="{% url 'pages:home' %}" style="border-bottom:1px solid var(--gold-light);">← Back to the public site</a></div>
 </footer>
 
+<script src="{% static 'js/nav.js' %}"></script>
 </body>
 </html>

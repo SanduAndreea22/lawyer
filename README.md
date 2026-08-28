@@ -65,3 +65,20 @@ the same demo password — **change this before any real deployment**:
 
 For full visibility across every lawyer's appointments and cases, use a
 superuser account (`createsuperuser`) instead.
+
+## Configuration / deployment
+
+Settings are read from environment variables (via a local `.env` file in
+development, or real environment variables from the host in production).
+Copy `.env.example` to `.env` and fill it in:
+
+- `DJANGO_SECRET_KEY` — generate one with
+  `python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"`
+- `DJANGO_DEBUG` — `True` locally, `False` in any real deployment
+- `DJANGO_ALLOWED_HOSTS`, `DJANGO_CSRF_TRUSTED_ORIGINS` — required once
+  `DJANGO_DEBUG=False`
+
+With `DJANGO_DEBUG=False`, HTTPS-only cookie and HSTS settings turn on
+automatically — see `config/settings.py`. The demo staff passwords above are
+fine for a portfolio demo but are public (they're in this README) — change
+them before pointing this at any real client data.

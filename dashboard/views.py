@@ -64,7 +64,7 @@ def overview(request):
             "upcoming": upcoming,
             "active_cases": active_cases,
             "unpaid_invoices": unpaid_invoices,
-            "active_nav": "dashboard",
+            "dashboard_nav": "overview",
         },
     )
 
@@ -82,7 +82,7 @@ def appointment_list(request):
             "appointments": appointments,
             "status_filter": status_filter,
             "statuses": Appointment.Status.choices,
-            "active_nav": "dashboard",
+            "dashboard_nav": "appointments",
         },
     )
 
@@ -121,7 +121,7 @@ def appointment_reschedule(request, pk):
     return render(
         request,
         "dashboard/reschedule.html",
-        {"appointment": appointment, "slots_by_day": slots_by_day, "active_nav": "dashboard"},
+        {"appointment": appointment, "slots_by_day": slots_by_day, "dashboard_nav": "appointments"},
     )
 
 
@@ -197,7 +197,7 @@ def case_list(request):
             "cases": cases,
             "status_filter": status_filter,
             "statuses": Case.Status.choices,
-            "active_nav": "dashboard",
+            "dashboard_nav": "cases",
         },
     )
 
@@ -233,7 +233,7 @@ def case_detail(request, pk):
             "upload_form": upload_form,
             "documents": case.documents.all(),
             "invoices": case.invoices.all(),
-            "active_nav": "dashboard",
+            "dashboard_nav": "cases",
         },
     )
 
