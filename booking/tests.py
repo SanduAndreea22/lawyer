@@ -109,6 +109,62 @@ class BookingConcurrencyTests(TestCase):
         self.assertEqual(Appointment.objects.count(), 1)
 
 
+class MalformedLawyerKeyTests(TestCase):
+    def setUp(self):
+        self.area = PracticeArea.objects.create(
+            name="Test Real Estate Law",
+            slug="test-real-estate-law",
+            short_description="x",
+            extended_description="x",
+            who_its_for="x",
+            next_steps="x",
+        )
+
+    def test_non_numeric_lawyer_key_in_choose_slot_is_a_404_not_a_crash(self):
+        response = self.client.get(f"/booking/{self.area.slug}/not-a-number/")
+        self.assertEqual(response.status_code, 404)
+
+    def test_non_numeric_lawyer_query_param_in_choose_lawyer_is_a_404_not_a_crash(self):
+        response = self.client.get(f"/booking/{self.area.slug}/?lawyer=not-a-number")
+        self.assertEqual(response.status_code, 404)
+
+
+class ConfirmationAccessTests(TestCase):
+    def setUp(self):
+        self.area = PracticeArea.objects.create(
+            name="Test Commercial Law 2",
+            slug="test-commercial-law-2",
+            short_description="x",
+            extended_description="x",
+            who_its_for="x",
+            next_steps="x",
+        )
+        self.lawyer = Lawyer.objects.create(
+            name="Mihai Cassian", specialization="Commercial Law", years_experience=10, bio="x"
+        )
+        self.appointment = Appointment.objects.create(
+            client_name="Ion Popescu",
+            client_phone="0722123456",
+            practice_area=self.area,
+            lawyer=self.lawyer,
+            start_time=_next_weekday_at(9),
+        )
+
+    def test_confirmation_is_not_reachable_by_guessing_the_id(self):
+        response = self.client.get(f"/booking/booked/{self.appointment.pk}/")
+        self.assertEqual(response.status_code, 404)
+
+    def test_confirmation_is_reachable_with_the_real_token(self):
+        url = reverse("booking:confirmation", args=[self.appointment.confirmation_token])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.appointment.client_phone)
+
+    def test_ics_is_not_reachable_by_guessing_the_id(self):
+        response = self.client.get(f"/booking/booked/{self.appointment.pk}/calendar.ics")
+        self.assertEqual(response.status_code, 404)
+
+
 class AvailableSlotsTests(TestCase):
     def setUp(self):
         self.area = PracticeArea.objects.create(

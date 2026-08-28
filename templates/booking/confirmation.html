@@ -16,7 +16,7 @@
   </p>
   <div class="cta-row" style="justify-content:center;">
     <a href="{% url 'pages:home' %}" class="btn-primary">Back to homepage</a>
-    <a href="{% url 'booking:appointment_ics' appointment.pk %}" class="btn-secondary">Add to calendar</a>
+    <a href="{% url 'booking:appointment_ics' appointment.confirmation_token %}" class="btn-secondary">Add to calendar</a>
   </div>
 </div>
 

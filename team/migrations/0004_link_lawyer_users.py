@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.hashers import make_password
 from django.db import migrations
 
@@ -12,6 +13,13 @@ USERNAMES = {
 
 
 def link_users(apps, schema_editor):
+    if not settings.DEBUG:
+        # Never seed real login credentials with a publicly-documented
+        # password outside local/dev use - a production `migrate` run
+        # (DJANGO_DEBUG=False) must not create these accounts. Staff
+        # accounts in production should be created deliberately, e.g. with
+        # `python manage.py seed_demo_users` or `createsuperuser`.
+        return
     Lawyer = apps.get_model("team", "Lawyer")
     User = apps.get_model("auth", "User")
     hashed = make_password(DEMO_PASSWORD)

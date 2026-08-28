@@ -53,18 +53,31 @@ staff area, and `/admin/` for the Django admin.
 
 Data migrations automatically seed the four practice areas, one lawyer per
 area, and one demo case with an invoice, so the site isn't empty on first
-run. Each seeded lawyer also gets a staff login for the dashboard, all with
-the same demo password — **change this before any real deployment**:
+run. This part always runs on `migrate`, in any environment — it's just
+content, not credentials.
 
-| Username | Password | Lawyer |
-|---|---|---|
-| `mihai.cassian` | `demo12345` | Commercial Law |
-| `delia.voicu` | `demo12345` | Family Law |
-| `radu.stoian` | `demo12345` | Real Estate Law |
-| `ana.petrescu` | `demo12345` | Civil Litigation |
+Staff **logins** for the dashboard are a separate, deliberate step — `migrate`
+alone never creates them, including in production. For local development or
+a demo deployment, create them explicitly:
 
-For full visibility across every lawyer's appointments and cases, use a
-superuser account (`createsuperuser`) instead.
+```bash
+python manage.py seed_demo_users
+```
+
+This links each seeded lawyer to a login, all sharing one password (printed
+by the command; `demo12345` unless you pass `--password`):
+
+| Username | Lawyer |
+|---|---|
+| `mihai.cassian` | Commercial Law |
+| `delia.voicu` | Family Law |
+| `radu.stoian` | Real Estate Law |
+| `ana.petrescu` | Civil Litigation |
+
+Don't run this against a deployment with real client data — use
+`createsuperuser` and/or the Django admin to create real staff accounts
+instead. For full visibility across every lawyer's appointments and cases,
+use a superuser account.
 
 ## Configuration / deployment
 
@@ -79,6 +92,13 @@ Copy `.env.example` to `.env` and fill it in:
   `DJANGO_DEBUG=False`
 
 With `DJANGO_DEBUG=False`, HTTPS-only cookie and HSTS settings turn on
-automatically — see `config/settings.py`. The demo staff passwords above are
-fine for a portfolio demo but are public (they're in this README) — change
-them before pointing this at any real client data.
+automatically — see `config/settings.py`. The demo staff password above is
+fine for a portfolio demo but is public (it's in this README, and it's the
+`seed_demo_users` default) — don't use it anywhere real client data lives.
+
+Uploaded media (lawyer photos, case documents) is served directly by Django
+in every environment, since no object storage (S3/Cloudinary/etc.) is wired
+up yet — fine for a small, low-traffic deployment, but note that anyone with
+a media URL can fetch it with no login check. Move to `django-storages` +
+S3 (or similar, with access control) before there's meaningful traffic or
+before case documents contain anything genuinely sensitive.

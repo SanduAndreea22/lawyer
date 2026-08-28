@@ -1,7 +1,7 @@
 import datetime as dt
 
 from django.db import IntegrityError, transaction
-from django.http import HttpResponse
+from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
@@ -11,6 +11,15 @@ from team.models import Lawyer
 from .forms import AppointmentContactForm
 from .models import Appointment
 from .services import get_available_slots, lawyers_for_area
+
+
+def _get_lawyer_or_404(lawyer_pk, area):
+    """Like get_object_or_404, but 404s on a non-numeric pk instead of
+    crashing with a 500 (Lawyer's pk is an integer, and this value often
+    comes straight from a URL segment or query string)."""
+    if not str(lawyer_pk).isdigit():
+        raise Http404("Invalid lawyer.")
+    return get_object_or_404(Lawyer, pk=lawyer_pk, practice_areas=area, is_active=True)
 
 
 def start(request):
@@ -32,7 +41,7 @@ def choose_lawyer(request, area_slug):
     selected = request.GET.get("lawyer")
     if selected:
         if selected != "any":
-            get_object_or_404(Lawyer, pk=selected, practice_areas=area, is_active=True)
+            _get_lawyer_or_404(selected, area)
         return redirect("booking:choose_slot", area_slug=area_slug, lawyer_key=selected)
     return render(
         request,
@@ -45,9 +54,7 @@ def choose_slot(request, area_slug, lawyer_key):
     area = get_object_or_404(PracticeArea, slug=area_slug, is_active=True)
     lawyer = None
     if lawyer_key != "any":
-        lawyer = get_object_or_404(
-            Lawyer, pk=lawyer_key, practice_areas=area, is_active=True
-        )
+        lawyer = _get_lawyer_or_404(lawyer_key, area)
     slots_by_day = get_available_slots(area, lawyer)
     return render(
         request,
@@ -104,7 +111,9 @@ def confirm(request, area_slug, lawyer_id, start_iso):
                         appointment.lawyer = lawyer
                         appointment.start_time = start_time
                         appointment.save()
-                        return redirect("booking:confirmation", pk=appointment.pk)
+                        return redirect(
+                            "booking:confirmation", token=appointment.confirmation_token
+                        )
             except IntegrityError:
                 slot_taken = True
 
@@ -123,8 +132,8 @@ def confirm(request, area_slug, lawyer_id, start_iso):
     )
 
 
-def confirmation(request, pk):
-    appointment = get_object_or_404(Appointment, pk=pk)
+def confirmation(request, token):
+    appointment = get_object_or_404(Appointment, confirmation_token=token)
     return render(
         request,
         "booking/confirmation.html",
@@ -136,8 +145,8 @@ def _ics_datetime(value):
     return value.astimezone(dt.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
 
 
-def appointment_ics(request, pk):
-    appointment = get_object_or_404(Appointment, pk=pk)
+def appointment_ics(request, token):
+    appointment = get_object_or_404(Appointment, confirmation_token=token)
     start = appointment.start_time
     end = start + dt.timedelta(minutes=30)
     lawyer_name = appointment.lawyer.name if appointment.lawyer else "one of our lawyers"

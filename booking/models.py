@@ -1,3 +1,5 @@
+import uuid
+
 from django.core.validators import RegexValidator
 from django.db import models
 
@@ -16,6 +18,14 @@ class Appointment(models.Model):
         CONFIRMED = "confirmed", "Confirmed"
         CANCELLED = "cancelled", "Cancelled"
 
+    confirmation_token = models.UUIDField(
+        default=uuid.uuid4,
+        editable=False,
+        unique=True,
+        help_text="Opaque public identifier — used in URLs instead of the "
+        "sequential id, so a booking can't be looked up by guessing/"
+        "incrementing a number.",
+    )
     client_name = models.CharField(max_length=120)
     client_phone = models.CharField(max_length=20, validators=[phone_validator])
     practice_area = models.ForeignKey(
