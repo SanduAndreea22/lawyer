@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Practice Areas — Cassian &amp; Voicu{% endblock %}
+{% block content %}
+
+<section class="page-header">
+  <span class="eyebrow">Practice Areas</span>
+  <h1>Four areas of practice, one standard of rigor.</h1>
+  <p class="lede">Whatever brought you here, the first conversation is the same: we listen, we tell you plainly where you stand, and you decide what happens next — no pressure, no obligation.</p>
+</section>
+
+<div class="area-detail">
+  {% for area in areas %}
+  <div class="area-block">
+    <div>
+      <span class="col-label">{{ forloop.counter|stringformat:"02d" }}</span>
+      <h2>{{ area.name }}</h2>
+      <p>{{ area.short_description }}</p>
+    </div>
+    <div>
+      <span class="col-label">Who it's for</span>
+      <p>{{ area.who_its_for|truncatewords:28 }}</p>
+    </div>
+    <div class="cta-cell">
+      <span class="col-label">Learn more</span>
+      <a href="{{ area.get_absolute_url }}" class="btn-secondary">Read about {{ area.name|lower }} →</a>
+      <a href="{% url 'booking:start' %}?area={{ area.slug }}" class="btn-secondary">Book a consultation</a>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}

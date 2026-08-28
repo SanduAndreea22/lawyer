@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Book a Consultation — Cassian &amp; Voicu{% endblock %}
+{% block content %}
+
+<section class="booking form-only">
+  <div>
+    <span class="eyebrow">Booking · {{ area.name }}</span>
+    <h2 style="max-width:none;">Any preference on who you speak with?</h2>
+    <p class="lede">Pick a specific lawyer, or let us match you with whoever is available soonest.</p>
+  </div>
+  <div class="booking-card">
+    <span class="step-label">Step 2 of 3 — Choose a lawyer</span>
+    <form method="get" action="{% url 'booking:choose_lawyer' area.slug %}">
+      <div class="field">
+        <label for="lawyer">Available lawyer</label>
+        <select class="form-select" id="lawyer" name="lawyer" required>
+          <option value="any">Any available — the soonest slot</option>
+          {% for lawyer in lawyers %}
+          <option value="{{ lawyer.pk }}">{{ lawyer.name }} — {{ lawyer.specialization }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="btn-primary">Continue</button>
+    </form>
+    <p class="no-obligation-note"><a href="{% url 'booking:start' %}" class="btn-secondary">← Choose a different practice area</a></p>
+  </div>
+</section>
+
+{% endblock %}

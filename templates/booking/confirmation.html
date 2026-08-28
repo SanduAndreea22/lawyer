@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Booking Confirmed — Cassian &amp; Voicu{% endblock %}
+{% block content %}
+
+<div class="confirmation-box">
+  <div class="ribbon-wrap small">
+    <div class="ribbon"></div>
+    <div class="seal"><span>C&amp;V</span></div>
+  </div>
+  <h1>Your consultation is booked.</h1>
+  <p>
+    {{ appointment.practice_area.name }} with {{ appointment.lawyer.name|default:"one of our lawyers" }},
+    on {{ appointment.start_time|date:"l, j F Y" }} at {{ appointment.start_time|date:"H:i" }}.
+    We'll call {{ appointment.client_phone }} to confirm ahead of time.
+  </p>
+  <a href="{% url 'pages:home' %}" class="btn-primary">Back to homepage</a>
+</div>
+
+{% endblock %}

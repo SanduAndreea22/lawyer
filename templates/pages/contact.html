@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Contact — Cassian &amp; Voicu{% endblock %}
+{% block content %}
+
+<section class="page-header">
+  <span class="eyebrow">Contact</span>
+  <h1>Get in touch.</h1>
+  <p class="lede">Call us directly, or leave your details below and we'll call you back.</p>
+</section>
+
+<div class="contact-grid">
+  <div class="contact-details">
+    <div class="item">
+      <span class="eyebrow">Address</span>
+      <p>14 Calea Victoriei, 3rd Floor<br>Bucharest, Romania</p>
+    </div>
+    <div class="item">
+      <span class="eyebrow">Phone</span>
+      <p>021 456 7890</p>
+    </div>
+    <div class="item">
+      <span class="eyebrow">Email</span>
+      <p>office@cassianvoicu.example</p>
+    </div>
+    <div class="item">
+      <span class="eyebrow">Office hours</span>
+      <p>Monday–Friday, 09:00–17:00</p>
+    </div>
+  </div>
+  <div class="booking-card" style="align-self:start;">
+    <span class="step-label">Send us a message</span>
+    <form method="post">
+      {% csrf_token %}
+      {% for field in form %}
+      <div class="field">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {{ field.errors }}
+      </div>
+      {% endfor %}
+      <button type="submit" class="btn-primary">Send message</button>
+    </form>
+    <p class="no-obligation-note">Prefer to book straight away? <a href="{% url 'booking:start' %}" style="color:var(--burgundy);border-bottom:1px solid var(--gold);">Go to booking →</a></p>
+  </div>
+</div>
+
+{% endblock %}

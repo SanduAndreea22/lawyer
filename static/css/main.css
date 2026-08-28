@@ -1,0 +1,578 @@
+:root {
+  --burgundy: #4A1620;
+  --burgundy-deep: #330F17;
+  --gold: #B08D57;
+  --gold-light: #D4B37F;
+  --parchment: #F3ECDD;
+  --parchment-dark: #E8DEC8;
+  --ink: #2A211C;
+  --olive: #5C6B4F;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--parchment);
+  color: var(--ink);
+  font-family: 'Source Serif 4', serif;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(74,22,32,0.02) 0%, transparent 45%),
+    radial-gradient(circle at 80% 70%, rgba(176,141,87,0.03) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.eyebrow {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 600;
+}
+
+h1, h2, h3 {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  color: var(--burgundy-deep);
+  letter-spacing: -0.01em;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ===== NAV ===== */
+nav {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.8rem 4rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+nav .brand {
+  font-family: 'Fraunces', serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--burgundy-deep);
+  letter-spacing: 0.01em;
+}
+nav .links {
+  display: flex;
+  gap: 2.5rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  color: var(--ink);
+}
+nav .links a { position: relative; padding-bottom: 4px; }
+nav .links a::after {
+  content: "";
+  position: absolute; left: 0; bottom: 0;
+  width: 0; height: 1px;
+  background: var(--gold);
+  transition: width 0.3s ease;
+}
+nav .links a:hover::after,
+nav .links a.active::after { width: 100%; }
+
+/* ===== PAGE HEADER (interior pages) ===== */
+.page-header {
+  position: relative;
+  z-index: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 3rem 4rem 1rem;
+}
+.page-header h1 {
+  font-size: clamp(2.2rem, 3.6vw, 3.2rem);
+  margin-top: 1rem;
+  max-width: 22ch;
+}
+.page-header p.lede {
+  font-size: 1.1rem;
+  max-width: 56ch;
+  color: #4a4038;
+  margin-top: 1.2rem;
+}
+
+/* ===== HERO ===== */
+.hero {
+  position: relative;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 5rem 4rem 8rem;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 4rem;
+  align-items: center;
+  z-index: 1;
+}
+
+.hero h1 {
+  font-size: clamp(2.6rem, 4.4vw, 4.2rem);
+  line-height: 1.08;
+  margin: 1.2rem 0 1.6rem;
+}
+.hero h1 em {
+  font-style: italic;
+  color: var(--burgundy);
+}
+
+.hero p.lede {
+  font-size: 1.15rem;
+  max-width: 46ch;
+  color: #4a4038;
+  margin-bottom: 2.4rem;
+}
+
+.cta-row { display: flex; gap: 1.2rem; align-items: center; flex-wrap: wrap; }
+
+.btn-primary {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  background: var(--burgundy);
+  color: var(--parchment);
+  padding: 1rem 2rem;
+  border-radius: 2px;
+  display: inline-block;
+  border: none;
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+.btn-primary:hover { background: var(--burgundy-deep); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-secondary {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  color: var(--burgundy);
+  border-bottom: 1px solid var(--gold);
+  padding-bottom: 3px;
+  background: none;
+}
+
+/* Signature element: the seal ribbon */
+.ribbon-wrap {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: 460px;
+}
+.ribbon-wrap.small { height: 140px; }
+.ribbon {
+  position: relative;
+  width: 92px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--gold-light) 0%, var(--gold) 55%, var(--burgundy) 100%);
+  clip-path: polygon(0 0, 100% 0, 100% 88%, 50% 100%, 0 88%);
+  box-shadow: 0 20px 60px -20px rgba(74,22,32,0.4);
+}
+.ribbon-wrap.small .ribbon { width: 48px; }
+.ribbon::before {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border: 1px solid rgba(243,236,221,0.55);
+}
+.seal {
+  position: absolute;
+  top: 68px; left: 50%;
+  transform: translateX(-50%);
+  width: 118px; height: 118px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--burgundy) 0%, var(--burgundy-deep) 70%);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 12px 30px -8px rgba(51,15,23,0.55), inset 0 0 0 3px rgba(176,141,87,0.5);
+}
+.ribbon-wrap.small .seal { width: 56px; height: 56px; top: 28px; }
+.seal span {
+  font-family: 'Fraunces', serif;
+  font-size: 1.9rem;
+  color: var(--gold-light);
+  letter-spacing: 0.03em;
+}
+.ribbon-wrap.small .seal span { font-size: 0.95rem; }
+
+/* Divider ribbon used between sections on interior pages */
+.section-divider {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  padding: 2.5rem 0;
+}
+.section-divider .mini-seal {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--burgundy) 0%, var(--burgundy-deep) 70%);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 8px 18px -6px rgba(51,15,23,0.5), inset 0 0 0 2px rgba(176,141,87,0.5);
+}
+.section-divider .mini-seal span {
+  font-family: 'Fraunces', serif;
+  font-size: 0.7rem;
+  color: var(--gold-light);
+}
+
+/* ===== SERVICES / PRACTICE AREAS ===== */
+.services {
+  position: relative;
+  z-index: 1;
+  background: var(--burgundy-deep);
+  color: var(--parchment);
+  padding: 6rem 4rem;
+}
+.services-inner { max-width: 1400px; margin: 0 auto; }
+.services .eyebrow { color: var(--gold-light); margin-bottom: 0.8rem; }
+.services h2 {
+  color: var(--parchment);
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  max-width: 20ch;
+  margin-bottom: 3.5rem;
+}
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border-top: 1px solid rgba(176,141,87,0.3);
+}
+.service-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+.service-card {
+  padding: 2.6rem 2rem 2.6rem 0;
+  border-right: 1px solid rgba(176,141,87,0.3);
+  padding-left: 0;
+}
+.service-card:first-child { padding-left: 0; }
+.service-card:not(:first-child) { padding-left: 2.2rem; }
+.service-card:last-child { border-right: none; }
+.service-card .num {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  color: var(--gold);
+  letter-spacing: 0.15em;
+  display: block;
+  margin-bottom: 1.2rem;
+}
+.service-card h3 {
+  color: var(--parchment);
+  font-size: 1.35rem;
+  margin-bottom: 0.9rem;
+}
+.service-card p {
+  font-size: 0.95rem;
+  color: rgba(243,236,221,0.7);
+}
+.service-card a.card-link {
+  display: inline-block;
+  margin-top: 1.2rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  color: var(--gold-light);
+  border-bottom: 1px solid rgba(212,179,127,0.5);
+  padding-bottom: 2px;
+}
+
+/* ===== TRUST SECTION ===== */
+.trust {
+  position: relative;
+  z-index: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 6rem 4rem;
+  text-align: center;
+}
+.trust .eyebrow { display: block; margin-bottom: 1rem; }
+.trust h2 { font-size: clamp(1.8rem, 2.6vw, 2.4rem); max-width: 32ch; margin: 0 auto 3rem; }
+.trust-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-bottom: 3.5rem;
+}
+.trust-stat .figure {
+  font-family: 'Fraunces', serif;
+  font-size: 2.6rem;
+  color: var(--burgundy);
+}
+.trust-stat .label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  color: #6b5f52;
+  margin-top: 0.4rem;
+}
+.trust-quote {
+  max-width: 60ch;
+  margin: 0 auto;
+  font-family: 'Fraunces', serif;
+  font-size: 1.4rem;
+  font-style: italic;
+  color: var(--burgundy-deep);
+  line-height: 1.5;
+}
+.trust-quote .attribution {
+  display: block;
+  margin-top: 1.2rem;
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-size: 0.82rem;
+  letter-spacing: 0.05em;
+  color: var(--olive);
+}
+
+/* ===== BOOKING ===== */
+.booking {
+  position: relative;
+  z-index: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 7rem 4rem;
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 5rem;
+}
+.booking.form-only { grid-template-columns: 1fr; max-width: 720px; padding-top: 3rem; }
+.booking .eyebrow { margin-bottom: 1rem; }
+.booking h2 {
+  font-size: clamp(2rem, 3vw, 2.6rem);
+  margin-bottom: 1.5rem;
+  max-width: 14ch;
+}
+.booking p.lede { color: #4a4038; margin-bottom: 2rem; font-size: 1.05rem; }
+
+.booking-card {
+  background: #fff;
+  border: 1px solid var(--parchment-dark);
+  border-radius: 4px;
+  padding: 2.4rem;
+  box-shadow: 0 30px 70px -30px rgba(74,22,32,0.18);
+}
+.booking-card .step-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--olive);
+  margin-bottom: 1.6rem;
+  display: block;
+}
+.field { margin-bottom: 1.4rem; }
+.field label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  color: var(--ink);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+.select-mock, .input-mock, select.form-select, input.form-input, textarea.form-input {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  border: 1px solid var(--parchment-dark);
+  background: var(--parchment);
+  padding: 0.85rem 1rem;
+  border-radius: 2px;
+  color: #4a4038;
+  width: 100%;
+  display: block;
+}
+textarea.form-input { resize: vertical; min-height: 90px; font-family: 'Source Serif 4', serif; }
+.slot-row { display: flex; gap: 0.7rem; flex-wrap: wrap; margin-top: 0.6rem; }
+.slot {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--parchment-dark);
+  border-radius: 2px;
+  color: #4a4038;
+  background: #fff;
+  cursor: pointer;
+}
+.slot.selected, a.slot.selected {
+  border-color: var(--burgundy);
+  background: var(--burgundy);
+  color: var(--parchment);
+}
+.slot-day { margin-bottom: 1.2rem; }
+.slot-day .day-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem;
+  color: var(--olive);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+.booking-card .btn-primary { width: 100%; text-align: center; margin-top: 0.6rem; }
+.booking-summary {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  background: var(--parchment);
+  border: 1px solid var(--parchment-dark);
+  border-radius: 2px;
+  padding: 1rem 1.2rem;
+  margin-bottom: 1.6rem;
+  color: #4a4038;
+}
+.booking-summary strong { color: var(--burgundy-deep); }
+.no-obligation-note {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem;
+  color: var(--olive);
+  margin-top: 1rem;
+  text-align: center;
+}
+.confirmation-box {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 6rem 2rem;
+}
+.confirmation-box h1 { margin: 1.5rem 0 1rem; }
+.confirmation-box p { color: #4a4038; margin-bottom: 2rem; }
+.errorlist {
+  list-style: none;
+  color: var(--burgundy);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem;
+  margin-top: 0.4rem;
+}
+
+/* ===== TEAM ===== */
+.team-grid {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem 4rem 6rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem;
+}
+.lawyer-card {
+  background: #fff;
+  border: 1px solid var(--parchment-dark);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px -30px rgba(74,22,32,0.18);
+}
+.lawyer-photo {
+  height: 220px;
+  background: linear-gradient(160deg, var(--parchment-dark) 0%, var(--gold-light) 120%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lawyer-photo span {
+  font-family: 'Fraunces', serif;
+  font-size: 2.2rem;
+  color: var(--burgundy-deep);
+  opacity: 0.55;
+}
+.lawyer-body { padding: 1.6rem 1.8rem 1.9rem; }
+.lawyer-body h3 { font-size: 1.2rem; margin-bottom: 0.3rem; }
+.lawyer-specialization {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem;
+  color: var(--gold);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.9rem;
+}
+.lawyer-body p.bio { font-size: 0.95rem; color: #4a4038; margin-bottom: 0.9rem; }
+.lawyer-years { font-family: 'Inter', sans-serif; font-size: 0.78rem; color: var(--olive); }
+
+/* ===== CONTACT ===== */
+.contact-grid {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem 4rem 6rem;
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 5rem;
+}
+.contact-details .item { margin-bottom: 2rem; }
+.contact-details .item .eyebrow { display: block; margin-bottom: 0.5rem; }
+.contact-details .item p { font-size: 1.05rem; }
+
+/* ===== PRACTICE AREA DETAIL ===== */
+.area-detail {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem 4rem 6rem;
+}
+.area-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 3rem;
+  padding: 3.5rem 0;
+  border-top: 1px solid var(--parchment-dark);
+}
+.area-block:last-child { border-bottom: 1px solid var(--parchment-dark); }
+.area-block h2 { font-size: 1.7rem; margin-bottom: 0.4rem; }
+.area-block .col-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--olive);
+  display: block;
+  margin-bottom: 0.7rem;
+}
+.area-block p { font-size: 0.98rem; color: #4a4038; }
+.area-block .cta-cell { display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start; gap: 0.9rem; }
+
+/* ===== FOOTER ===== */
+footer {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid var(--parchment-dark);
+  padding: 3rem 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+footer .brand { font-family: 'Fraunces', serif; color: var(--burgundy-deep); }
+footer .meta {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem;
+  color: #8a7d6c;
+}
+
+.messages { max-width: 1400px; margin: 1rem auto 0; padding: 0 4rem; }
+.messages li {
+  list-style: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  background: var(--parchment-dark);
+  border-left: 3px solid var(--gold);
+  padding: 0.8rem 1rem;
+  margin-bottom: 0.6rem;
+  color: var(--ink);
+}
+
+@media (max-width: 900px) {
+  nav, .hero, .services, .booking, footer, .page-header, .trust, .team-grid, .contact-grid, .area-detail {
+    padding-left: 1.6rem; padding-right: 1.6rem;
+  }
+  .hero { grid-template-columns: 1fr; padding-top: 3rem; }
+  .ribbon-wrap { height: 220px; order: -1; }
+  .service-grid, .service-grid.cols-4 { grid-template-columns: 1fr; }
+  .service-card, .service-card:not(:first-child) { border-right: none; border-bottom: 1px solid rgba(176,141,87,0.3); padding-left: 0; }
+  .booking { grid-template-columns: 1fr; }
+  .trust-stats { grid-template-columns: 1fr; gap: 2.5rem; }
+  .team-grid { grid-template-columns: 1fr; }
+  .contact-grid { grid-template-columns: 1fr; }
+  .area-block { grid-template-columns: 1fr; gap: 1.2rem; }
+  nav .links { display: none; }
+  footer { flex-direction: column; gap: 1rem; text-align: center; }
+}

@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}Cassian &amp; Voicu — Law Firm{% endblock %}
+{% block content %}
+
+<section class="hero">
+  <div>
+    <span class="eyebrow">Law Firm · Bucharest</span>
+    <h1>Legal clarity,<br><em>built</em> on trust.</h1>
+    <p class="lede">For three decades, we've advised entrepreneurs and families through the moments that matter — with rigor, discretion, and a single goal: for you to understand exactly where you stand.</p>
+    <div class="cta-row">
+      <a href="{% url 'booking:start' %}" class="btn-primary">Book a consultation</a>
+      <a href="{% url 'practice_areas:list' %}" class="btn-secondary">See our practice areas</a>
+    </div>
+  </div>
+  <div class="ribbon-wrap">
+    <div class="ribbon"></div>
+    <div class="seal"><span>C&amp;V</span></div>
+  </div>
+</section>
+
+<section class="services" id="services">
+  <div class="services-inner">
+    <span class="eyebrow">Practice Areas</span>
+    <h2>Four areas of practice, one standard of rigor.</h2>
+    <div class="service-grid cols-4">
+      {% for area in areas %}
+      <div class="service-card">
+        <span class="num">{{ forloop.counter|stringformat:"02d" }}</span>
+        <h3>{{ area.name }}</h3>
+        <p>{{ area.short_description }}</p>
+        <a href="{{ area.get_absolute_url }}" class="card-link">Learn more →</a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="trust">
+  <span class="eyebrow">Why clients trust us</span>
+  <h2>Three decades of straightforward advice, not empty promises.</h2>
+  <div class="trust-stats">
+    <div class="trust-stat">
+      <div class="figure">28</div>
+      <div class="label">Years in practice</div>
+    </div>
+    <div class="trust-stat">
+      <div class="figure">1,400+</div>
+      <div class="label">Cases handled</div>
+    </div>
+    <div class="trust-stat">
+      <div class="figure">4</div>
+      <div class="label">Areas of practice, one standard</div>
+    </div>
+  </div>
+  <p class="trust-quote">
+    "Clients rarely need a lecture on the law. They need someone who tells them, plainly, where they stand — and what happens next."
+    <span class="attribution">— Founding Partner, Cassian &amp; Voicu</span>
+  </p>
+</section>
+
+<section class="booking" id="programare">
+  <div>
+    <span class="eyebrow">Booking</span>
+    <h2>The first conversation, with no obligation.</h2>
+    <p class="lede">A 30-minute initial consultation, so you understand your situation and the possible next steps — before you decide anything.</p>
+    <a href="{% url 'pages:contact' %}" class="btn-secondary">Or contact us directly →</a>
+  </div>
+  <div class="booking-card">
+    <span class="step-label">Start your booking</span>
+    <div class="field">
+      <label>Practice area</label>
+      <div class="select-mock">{{ areas.0.name|default:"Commercial Law" }}</div>
+    </div>
+    <div class="field">
+      <label>Available lawyer</label>
+      <div class="select-mock">Any available — the soonest slot</div>
+    </div>
+    <div class="field">
+      <label>Available times</label>
+      <div class="slot-row">
+        <div class="slot">10:00</div>
+        <div class="slot selected">11:00</div>
+        <div class="slot">14:00</div>
+        <div class="slot">16:00</div>
+      </div>
+    </div>
+    <a href="{% url 'booking:start' %}" class="btn-primary">Book a consultation</a>
+  </div>
+</section>
+
+{% endblock %}

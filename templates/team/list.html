@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Team — Cassian &amp; Voicu{% endblock %}
+{% block content %}
+
+<section class="page-header">
+  <span class="eyebrow">Team</span>
+  <h1>Who you'll be working with.</h1>
+  <p class="lede">Not a full résumé for each of us — just who helps you, and why you can rely on them.</p>
+</section>
+
+<div class="team-grid">
+  {% for lawyer in lawyers %}
+  <div class="lawyer-card">
+    <div class="lawyer-photo">
+      {% if lawyer.photo %}
+        <img src="{{ lawyer.photo.url }}" alt="{{ lawyer.name }}" style="width:100%;height:100%;object-fit:cover;">
+      {% else %}
+        <span>{{ lawyer.initials }}</span>
+      {% endif %}
+    </div>
+    <div class="lawyer-body">
+      <h3>{{ lawyer.name }}</h3>
+      <span class="lawyer-specialization">{{ lawyer.specialization }}</span>
+      <p class="bio">{{ lawyer.bio }}</p>
+      <span class="lawyer-years">{{ lawyer.years_experience }} years of experience</span>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% include "_divider.html" %}
+
+<section class="booking form-only" style="padding-top:0;">
+  <div style="text-align:center;">
+    <span class="eyebrow">Meet the team</span>
+    <h2 style="max-width:none;">Ready to talk it through?</h2>
+    <p class="lede" style="margin:1rem auto 2rem;">Book a free initial consultation and we'll match you with the right person for your situation.</p>
+    <a href="{% url 'booking:start' %}" class="btn-primary">Book a consultation</a>
+  </div>
+</section>
+
+{% endblock %}

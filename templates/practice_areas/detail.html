@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}{{ area.name }} — Cassian &amp; Voicu{% endblock %}
+{% block content %}
+
+<section class="page-header">
+  <span class="eyebrow">Practice Area</span>
+  <h1>{{ area.name }}</h1>
+  <p class="lede">{{ area.short_description }}</p>
+</section>
+
+<div class="area-detail">
+  <div class="area-block">
+    <div>
+      <span class="col-label">What it involves</span>
+      <p>{{ area.extended_description|linebreaks }}</p>
+    </div>
+    <div>
+      <span class="col-label">Who it's for</span>
+      <p>{{ area.who_its_for|linebreaks }}</p>
+    </div>
+    <div>
+      <span class="col-label">After the first conversation</span>
+      <p>{{ area.next_steps|linebreaks }}</p>
+    </div>
+  </div>
+</div>
+
+{% include "_divider.html" %}
+
+<section class="booking form-only" style="padding-top:0;">
+  <div style="text-align:center;">
+    <span class="eyebrow">Next step</span>
+    <h2 style="max-width:none;">Talk it through, with no obligation.</h2>
+    <p class="lede" style="margin:1rem auto 2rem;">A 30-minute initial consultation on {{ area.name|lower }}, so you understand the situation and the possible next steps before you decide anything.</p>
+    <a href="{% url 'booking:start' %}?area={{ area.slug }}" class="btn-primary">Book a consultation on {{ area.name|lower }}</a>
+  </div>
+</section>
+
+{% endblock %}

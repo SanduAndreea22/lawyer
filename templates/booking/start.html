@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Book a Consultation — Cassian &amp; Voicu{% endblock %}
+{% block content %}
+
+<section class="booking form-only">
+  <div>
+    <span class="eyebrow">Booking</span>
+    <h2 style="max-width:none;">The first conversation, with no obligation.</h2>
+    <p class="lede">A 30-minute initial consultation, so you understand your situation and the possible next steps — before you decide anything.</p>
+  </div>
+  <div class="booking-card">
+    <span class="step-label">Step 1 of 3 — Choose a practice area</span>
+    <form method="get" action="{% url 'booking:start' %}">
+      <div class="field">
+        <label for="area">Practice area</label>
+        <select class="form-select" id="area" name="area" required>
+          <option value="" disabled selected>Choose the area that fits your situation</option>
+          {% for area in areas %}
+          <option value="{{ area.slug }}">{{ area.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="btn-primary">Continue</button>
+    </form>
+    <p class="no-obligation-note">No payment, no commitment — just a conversation.</p>
+  </div>
+</section>
+
+{% endblock %}

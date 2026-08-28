@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Book a Consultation — Cassian &amp; Voicu{% endblock %}
+{% block content %}
+
+<section class="booking form-only">
+  <div>
+    <span class="eyebrow">Booking · {{ area.name }}</span>
+    <h2 style="max-width:none;">Pick a time that works.</h2>
+    <p class="lede">
+      {% if lawyer %}Available times for {{ lawyer.name }}.{% else %}Available times — matched automatically to the first available lawyer.{% endif %}
+    </p>
+  </div>
+  <div class="booking-card">
+    <span class="step-label">Step 3 of 3 — Choose a time slot</span>
+
+    {% if slots_by_day %}
+      {% for day, slots in slots_by_day.items %}
+      <div class="slot-day">
+        <span class="day-label">{{ day|date:"l, j F" }}</span>
+        <div class="slot-row">
+          {% for slot in slots %}
+          <a class="slot" href="{% url 'booking:confirm' area.slug slot.lawyer.pk slot.start|date:'YmdHi' %}">{{ slot.start|date:"H:i" }}</a>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <p style="font-family:'Inter',sans-serif;font-size:0.9rem;color:#4a4038;">No open slots in the next few weeks{% if lawyer %} for {{ lawyer.name }}{% endif %}. Please call us directly, or try a different lawyer.</p>
+    {% endif %}
+
+    <p class="no-obligation-note"><a href="{% url 'booking:choose_lawyer' area.slug %}" class="btn-secondary">← Choose a different lawyer</a></p>
+  </div>
+</section>
+
+{% endblock %}
