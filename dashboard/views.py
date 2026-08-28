@@ -10,7 +10,7 @@ from booking.models import Appointment
 from booking.services import get_available_slots
 
 from .access import is_full_staff, staff_or_lawyer_required, user_lawyer
-from .forms import CaseStatusForm, DocumentUploadForm
+from .forms import CaseStatusForm, DocumentUploadForm, InvoiceForm
 from .models import Case, Invoice
 
 
@@ -207,6 +207,7 @@ def case_detail(request, pk):
     case = get_object_or_404(_visible_cases(request), pk=pk)
     status_form = CaseStatusForm(instance=case)
     upload_form = DocumentUploadForm()
+    invoice_form = InvoiceForm()
 
     if request.method == "POST":
         if "update_status" in request.POST:
@@ -223,6 +224,14 @@ def case_detail(request, pk):
                 document.save()
                 messages.success(request, "Document uploaded.")
                 return redirect("dashboard:case_detail", pk=case.pk)
+        elif "create_invoice" in request.POST:
+            invoice_form = InvoiceForm(request.POST)
+            if invoice_form.is_valid():
+                invoice = invoice_form.save(commit=False)
+                invoice.case = case
+                invoice.save()
+                messages.success(request, "Invoice created.")
+                return redirect("dashboard:case_detail", pk=case.pk)
 
     return render(
         request,
@@ -231,6 +240,7 @@ def case_detail(request, pk):
             "case": case,
             "status_form": status_form,
             "upload_form": upload_form,
+            "invoice_form": invoice_form,
             "documents": case.documents.all(),
             "invoices": case.invoices.all(),
             "dashboard_nav": "cases",

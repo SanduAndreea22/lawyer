@@ -32,6 +32,7 @@
       <div class="dash-row">
         <div>
           <div class="primary">{{ invoice.amount }} RON</div>
+          {% if invoice.description %}<div class="meta" style="text-align:left;">{{ invoice.description }}</div>{% endif %}
           <span class="status-badge status-{{ invoice.status }}">{{ invoice.get_status_display }}</span>
         </div>
         <div class="meta">
@@ -45,8 +46,25 @@
         </div>
       </div>
       {% empty %}
-      <p class="empty">No invoices yet for this case. Add one from the admin.</p>
+      <p class="empty">No invoices yet for this case.</p>
       {% endfor %}
+
+      <form method="post" style="margin-top:1.6rem;">
+        {% csrf_token %}
+        <div class="field">
+          <label for="{{ invoice_form.amount.id_for_label }}">{{ invoice_form.amount.label }}</label>
+          {{ invoice_form.amount }}
+        </div>
+        <div class="field">
+          <label for="{{ invoice_form.description.id_for_label }}">Description</label>
+          {{ invoice_form.description }}
+        </div>
+        <div class="field">
+          <label for="{{ invoice_form.due_date.id_for_label }}">Due date</label>
+          {{ invoice_form.due_date }}
+        </div>
+        <button type="submit" name="create_invoice" class="btn-primary">Add invoice</button>
+      </form>
     </div>
   </div>
 

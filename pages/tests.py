@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from .models import ContactMessage
@@ -36,3 +36,12 @@ class PublicPagesSmokeTests(TestCase):
     def test_contact_page_loads(self):
         response = self.client.get(reverse("pages:contact"))
         self.assertEqual(response.status_code, 200)
+
+
+class ErrorPageTests(TestCase):
+    @override_settings(DEBUG=False, ALLOWED_HOSTS=["testserver"])
+    def test_custom_404_page_renders_on_brand(self):
+        response = self.client.get("/this-page-does-not-exist/")
+        self.assertEqual(response.status_code, 404)
+        self.assertContains(response, "This page doesn't exist.", status_code=404)
+        self.assertContains(response, "Back to homepage", status_code=404)

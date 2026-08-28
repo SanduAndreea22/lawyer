@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from booking.models import Appointment
-from dashboard.models import Case
+from dashboard.models import Case, Invoice
 from practice_areas.models import PracticeArea
 from team.models import Lawyer
 
@@ -145,3 +145,52 @@ class AppointmentManagementTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.appointment.refresh_from_db()
         self.assertNotEqual(self.appointment.start_time, other_start)
+
+
+class InvoiceTests(TestCase):
+    def setUp(self):
+        self.area = PracticeArea.objects.create(
+            name="Test Civil Litigation",
+            slug="test-civil-litigation",
+            short_description="x",
+            extended_description="x",
+            who_its_for="x",
+            next_steps="x",
+        )
+        self.user = User.objects.create_user("lawyer.a", password="testpass123")
+        self.lawyer = Lawyer.objects.create(
+            user=self.user, name="Lawyer A", specialization="Civil Litigation",
+            years_experience=5, bio="x",
+        )
+        self.case = Case.objects.create(
+            client_name="Client A",
+            client_phone="0700000001",
+            lawyer=self.lawyer,
+            practice_area=self.area,
+        )
+        self.client.login(username="lawyer.a", password="testpass123")
+
+    def test_creating_an_invoice_from_the_case_detail_page(self):
+        url = reverse("dashboard:case_detail", args=[self.case.pk])
+        response = self.client.post(
+            url,
+            {
+                "create_invoice": "1",
+                "amount": "450.00",
+                "description": "Follow-up review",
+                "due_date": "2026-10-01",
+            },
+        )
+        self.assertEqual(response.status_code, 302)
+        invoice = Invoice.objects.get(case=self.case)
+        self.assertEqual(str(invoice.amount), "450.00")
+        self.assertEqual(invoice.status, Invoice.Status.UNPAID)
+
+    def test_toggle_paid_flips_status(self):
+        invoice = Invoice.objects.create(
+            case=self.case, amount="200.00", due_date="2026-10-01"
+        )
+        url = reverse("dashboard:invoice_toggle_paid", args=[invoice.pk])
+        self.client.post(url)
+        invoice.refresh_from_db()
+        self.assertEqual(invoice.status, Invoice.Status.PAID)
