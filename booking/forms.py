@@ -29,3 +29,7 @@ class AppointmentContactForm(HoneypotMixin, forms.ModelForm):
             "client_phone": "Phone number",
             "note": "A few words about your situation",
         }
+        error_messages = {
+            "client_name": {"required": "Let us know your name, so we know who to expect."},
+            "client_phone": {"required": "We'll need a phone number to confirm your booking."},
+        }

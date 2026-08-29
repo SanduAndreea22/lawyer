@@ -25,3 +25,8 @@ class ContactMessageForm(HoneypotMixin, forms.ModelForm):
             "phone": "Phone number",
             "message": "A few words about your situation",
         }
+        error_messages = {
+            "name": {"required": "Let us know your name, so we know who to expect."},
+            "phone": {"required": "We'll need a phone number to call you back."},
+            "message": {"required": "A line or two helps us understand your situation."},
+        }

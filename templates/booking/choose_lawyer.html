@@ -16,7 +16,7 @@
       <div class="field">
         <label for="lawyer">Available lawyer</label>
         <select class="form-select" id="lawyer" name="lawyer" required>
-          <option value="any">Any available — the soonest slot</option>
+          <option value="any">No preference — book the soonest available slot</option>
           {% for lawyer in lawyers %}
           <option value="{{ lawyer.pk }}">{{ lawyer.name }} — {{ lawyer.specialization }}</option>
           {% endfor %}

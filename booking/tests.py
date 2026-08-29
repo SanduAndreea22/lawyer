@@ -185,7 +185,11 @@ class AvailableSlotsTests(TestCase):
         self.lawyer_b.practice_areas.add(self.area)
 
     def test_any_available_offers_the_other_lawyer_when_one_is_booked(self):
-        slot = _next_weekday_at(9)
+        # days_ahead=1 always lands on the first weekday get_available_slots()
+        # itself would scan, so this stays valid no matter what "today" is —
+        # a larger offset can fall outside the function's 5-day result cap
+        # once a weekend is in between.
+        slot = _next_weekday_at(9, days_ahead=1)
         Appointment.objects.create(
             client_name="Booked Client",
             client_phone="0700000000",

@@ -8,7 +8,7 @@ from team.models import Lawyer
 
 phone_validator = RegexValidator(
     regex=r"^[0-9+()\-\s]{7,20}$",
-    message="Enter a valid phone number.",
+    message="That doesn't look like a valid phone number — numbers, spaces and + are fine (e.g. 07xx xxx xxx).",
 )
 
 
