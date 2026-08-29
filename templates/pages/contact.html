@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Contact — Cassian &amp; Voicu{% endblock %}
 {% block meta_description %}Address, phone, and a short contact form — get in touch with Cassian &amp; Voicu.{% endblock %}
 {% block content %}
@@ -59,3 +60,4 @@
 </div>
 
 {% endblock %}
+{% block extra_js %}<script src="{% static 'js/char-counter.js' %}"></script>{% endblock %}

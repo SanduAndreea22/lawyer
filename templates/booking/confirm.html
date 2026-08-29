@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Confirm Your Consultation — Cassian &amp; Voicu{% endblock %}
 {% block robots %}<meta name="robots" content="noindex, nofollow">{% endblock %}
 {% block content %}
@@ -11,12 +12,12 @@
   </div>
   {% include "booking/_progress.html" %}
   <div class="booking-card">
-    <span class="step-label">Confirm your details</span>
+    <span class="step-label">Step 4 of 4 — Confirm your details</span>
 
     {% if slot_taken %}
       <div class="booking-summary" style="border-left:3px solid var(--burgundy);">
         This time slot is no longer available — someone else just booked it.
-        <a href="{% url 'booking:choose_slot' area.slug lawyer.pk %}" class="btn-secondary">Choose another time →</a>
+        <a href="{% url 'booking:choose_slot' area.slug lawyer_key %}" class="btn-secondary">Choose another time →</a>
       </div>
     {% else %}
       <div class="booking-summary">
@@ -44,3 +45,4 @@
 </section>
 
 {% endblock %}
+{% block extra_js %}<script src="{% static 'js/char-counter.js' %}"></script>{% endblock %}

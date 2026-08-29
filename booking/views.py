@@ -74,6 +74,11 @@ def choose_slot(request, area_slug, lawyer_key):
 def confirm(request, area_slug, lawyer_id, start_iso):
     area = get_object_or_404(PracticeArea, slug=area_slug, is_active=True)
     lawyer = get_object_or_404(Lawyer, pk=lawyer_id, practice_areas=area, is_active=True)
+    # Carries the client's original step-2 choice ("any" or a specific
+    # lawyer) through to a slot-collision retry, so someone with no
+    # preference isn't silently pinned to the one lawyer who just got
+    # booked out from under them.
+    lawyer_key = request.GET.get("pref") or str(lawyer_id)
     try:
         naive_start = dt.datetime.strptime(start_iso, "%Y%m%d%H%M")
         start_time = timezone.make_aware(naive_start)
@@ -119,6 +124,7 @@ def confirm(request, area_slug, lawyer_id, start_iso):
             "start_time": start_time,
             "form": form,
             "slot_taken": slot_taken,
+            "lawyer_key": lawyer_key,
             "active_nav": "booking",
             "current_step": 4,
         },

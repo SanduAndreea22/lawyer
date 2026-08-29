@@ -13,7 +13,7 @@
   </div>
   {% include "booking/_progress.html" %}
   <div class="booking-card">
-    <span class="step-label">Step 3 of 3 — Choose a time slot</span>
+    <span class="step-label">Step 3 of 4 — Choose a time slot</span>
 
     {% if slots_by_day %}
       {% for day, slots in slots_by_day.items %}
@@ -21,13 +21,13 @@
         <span class="day-label">{{ day|date:"l, j F" }}</span>
         <div class="slot-row">
           {% for slot in slots %}
-          <a class="slot" href="{% url 'booking:confirm' area.slug slot.lawyer.pk slot.start|date:'YmdHi' %}">{{ slot.start|date:"H:i" }}</a>
+          <a class="slot" href="{% url 'booking:confirm' area.slug slot.lawyer.pk slot.start|date:'YmdHi' %}?pref={{ lawyer_key }}">{{ slot.start|date:"H:i" }}</a>
           {% endfor %}
         </div>
       </div>
       {% endfor %}
     {% else %}
-      <p style="font-family:'Inter',sans-serif;font-size:0.9rem;color:#4a4038;">No open slots in the next few weeks{% if lawyer %} for {{ lawyer.name }}{% endif %}. Please call us directly, or try a different lawyer.</p>
+      <p style="font-family:'Inter',sans-serif;font-size:0.9rem;color:#4a4038;">No open slots in the next few weeks{% if lawyer %} for {{ lawyer.name }}{% endif %}. Please <a href="tel:+40214567890" style="color:var(--burgundy);border-bottom:1px solid var(--gold);">call us directly</a>, or try a different lawyer.</p>
     {% endif %}
 
     <p class="no-obligation-note"><a href="{% url 'booking:choose_lawyer' area.slug %}" class="btn-secondary">← Choose a different lawyer</a></p>

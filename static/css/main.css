@@ -493,6 +493,14 @@ button.slot { font: inherit; }
   color: #4a4038;
 }
 .booking-summary strong { color: var(--burgundy-deep); }
+.char-counter {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  color: var(--olive);
+  margin-top: 0.4rem;
+  text-align: right;
+}
 .no-obligation-note {
   font-family: 'Inter', sans-serif;
   font-size: 0.78rem;
